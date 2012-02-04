@@ -1,0 +1,27 @@
+h1. About
+
+This purpose of this add-on is to use as a DateTime helper. Currently, it supports only to get time difference in both words and array.
+
+Author: Morshed Alam (morshed201@gmail.com)
+Build Date: 2nd December, 2008
+Version: 0.1
+
+h3. Time difference as words
+
+<pre><code>$dHelper = new DateTimeHelper();
+$dHelper->timeDiffAsWords('2011-03-01 10:00:10');
+</code></pre>
+
+h3. Time difference as Array
+
+<pre><code>$dHelper = new DateTimeHelper();
+$dHelper->timeDifference('2011-03-01 10:00:10', '2011-03-02 10:00:10')
+</code></pre>
+
+h3. Example results
+
+<pre><code>0  - 59 seconds => one minute
+25 - 35 minutes => half an hour
+55 - 65 minutes => an hour
+Others          => exactly what should be
+</code></pre>
