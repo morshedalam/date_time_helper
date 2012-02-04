@@ -5,7 +5,7 @@
  *
  * @package DateTimeHelper
  * @author Morshed Alam <morshed201@gmail.com>
- * @link http://github.com/morshed-alam/date_time_helper/
+ * @link http://github.com/morshedalam/date_time_helper/
  * @website http://morshed-alam.com
  * @version 0.1
  */
