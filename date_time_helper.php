@@ -5,7 +5,7 @@
  *
  * @package DateTimeHelper
  * @author Morshed Alam <morshed201@gmail.com>
- * @link http://github.com/morshed-alam/date_time_helper/
+ * @link http://github.com/morshedalam/date_time_helper/
  * @website http://morshed-alam.com
  * @version 0.1
  */
@@ -31,7 +31,7 @@ class DateTimeHelper extends DateTime {
      *  @param to DateTime
      *  @return the difference in the two DateTime objects
      */
-    public function timeDifference($from, $to = NULL) {
+    public function timeDifference($from = 'now', $to = NULL) {
         $from = new DateTime($from);
         $to = new DateTime($to);
         return $to->diff($from);
@@ -57,19 +57,20 @@ class DateTimeHelper extends DateTime {
             }
 
             if ($diff_in_seconds < 60) { //less than a minute
-                $difference = trim($prefix . ' one minute ' . $suffix);
+                $difference = 'less than a minute ' . $suffix;
             } elseif ($diff_in_seconds > 1500 & $diff_in_seconds < 2100) { //25 - 35 minutes
-                $difference = trim($prefix . ' half an hour ' . $suffix);
+                $difference = $prefix . ' half an hour ' . $suffix;
             } elseif ($diff_in_seconds > 3300 & $diff_in_seconds < 3900) { //55 - 65 minutes
-                $difference = trim($prefix . ' an hour ' . $suffix);
+                $difference = $prefix . ' an hour ' . $suffix;
             } else {
                 foreach ($this->timeDifference($from, $to) as $index => $value) {
                     $words[] = $this->_stringify($this->keys[$index][0], $value);
                 }
-                $difference = trim($prefix . ' ' . implode($words, ' ') . ' ' . $suffix);
+                $difference = $prefix . ' ' . implode($words, ' ') . ' ' . $suffix;
             }
         }
-        return $difference;
+        
+        return trim($difference);
     }
 
     /**
