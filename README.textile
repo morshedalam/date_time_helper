@@ -20,7 +20,7 @@ $dHelper->timeDifference('2011-03-01 10:00:10', '2011-03-02 10:00:10')
 
 h3. Example results
 
-<pre><code>0  - 59 seconds => one minute
+<pre><code>0  - 59 seconds => less than a minute
 25 - 35 minutes => half an hour
 55 - 65 minutes => an hour
 Others          => exactly what should be
