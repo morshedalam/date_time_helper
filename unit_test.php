@@ -3,6 +3,14 @@
 require_once($_SERVER['DOCUMENT_ROOT'] . '/simpletest/autorun.php');
 require_once('date_time_helper.php');
 
+/**
+ * Unit test for DateTime Helper class
+ *
+ * @package DateTimeHelper
+ * @author Morshed Alam <morshed201@gmail.com>
+ * @link http://github.com/morshedalam/date_time_helper/
+ * @website http://morshed-alam.com
+ */
 class TestOfDateTimeHelper extends UnitTestCase
 {
 

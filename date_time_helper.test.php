@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Example of uses
+ *
+ * @package DateTimeHelper
+ * @author Morshed Alam <morshed201@gmail.com>
+ * @link http://github.com/morshedalam/date_time_helper/
+ * @website http://morshed-alam.com
+ */
+
 require 'date_time_helper.php';
 $dHelper = new DateTimeHelper();
 
