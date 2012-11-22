@@ -1,6 +1,6 @@
 h1. About
 
-A sample DateTime helper class to get time difference in both words and array with example of writing unit test using SimpleTest - http://www.simpletest.org/
+A sample DateTime helper class to get time difference in both words and array with example of writing unit test using [SimpleTest](http://www.simpletest.org/en/download.html "SimpleTest")
 
 
 h3. Time difference as words
