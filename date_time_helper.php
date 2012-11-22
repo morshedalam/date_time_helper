@@ -9,7 +9,8 @@
  * @website http://morshed-alam.com
  * @version 0.1
  */
-class DateTimeHelper extends DateTime {
+class DateTimeHelper extends DateTime
+{
 
     private $keys = array(
         'y' => array('year', 31104000),
@@ -19,7 +20,8 @@ class DateTimeHelper extends DateTime {
         'i' => array('minute', 60)
     );
 
-    public function __construct($time = "now", $zone = NULL) {
+    public function __construct($time = "now", $zone = NULL)
+    {
         //Set the time zone as 'Asia/Shanghai' for null
         $zone = $zone ? $zone : 'Asia/Shanghai';
         parent::__construct($time, new DateTimeZone($zone));
@@ -27,11 +29,12 @@ class DateTimeHelper extends DateTime {
 
     /**
      *  Finds the time difference between two dates
-     *  @param from DateTime
-     *  @param to DateTime
-     *  @return the difference in the two DateTime objects
+     * @param from DateTime
+     * @param to DateTime
+     * @return the difference in the two DateTime objects
      */
-    public function timeDifference($from = 'now', $to = NULL) {
+    public function timeDifference($from = 'now', $to = NULL)
+    {
         $from = new DateTime($from);
         $to = new DateTime($to);
         return $to->diff($from);
@@ -39,13 +42,14 @@ class DateTimeHelper extends DateTime {
 
     /**
      *  Get the time difference as words
-     *  @param from DateTime
-     *  @param to DateTime
-     *  @prefix to String to add as a prefix
-     *  @suffix to String to add as a suffix
-     *  @return the time difference as string
+     * @param from DateTime
+     * @param to DateTime
+     * @prefix to String to add as a prefix
+     * @suffix to String to add as a suffix
+     * @return the time difference as string
      */
-    public function timeDiffAsWords($from = NULL, $to = NULL, $prefix = 'about', $suffix = 'ago') {
+    public function timeDiffAsWords($from = NULL, $to = NULL, $prefix = 'about', $suffix = 'ago')
+    {
         $words = array();
         $diff_in_seconds = 0;
 
@@ -69,17 +73,18 @@ class DateTimeHelper extends DateTime {
                 $difference = $prefix . ' ' . implode($words, ' ') . ' ' . $suffix;
             }
         }
-        
+
         return trim($difference);
     }
 
     /**
      *  Convert time to string and pluralize
-     *  @param word string, ex: hour, minute
-     *  @param value int
-     *  @return pluralized word with string convertion
+     * @param word string, ex: hour, minute
+     * @param value int
+     * @return pluralized word with string convertion
      */
-    private function _stringify($word, $value = 0) {
+    private function _stringify($word, $value = 0)
+    {
         $str = '';
         if ($word) {
             if ($value == 1) {

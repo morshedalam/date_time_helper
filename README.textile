@@ -1,10 +1,7 @@
 h1. About
 
-The purpose of this add-on is to use as a DateTime helper. Currently, it supports only to get time difference in both words and array.
+A sample DateTime helper class to get time difference in both words and array with example of writing unit test using SimpleTest - http://www.simpletest.org/
 
-Author: Morshed Alam (morshed201@gmail.com)
-Build Date: 2nd December, 2008
-Version: 0.1
 
 h3. Time difference as words
 
@@ -25,3 +22,9 @@ h3. Example results
 55 - 65 minutes => an hour
 Others          => exactly what should be
 </code></pre>
+
+h3. Testing
+
+- Download [SimpleTest](http://www.simpletest.org/en/download.html "SimpleTest") suit and place it to document root directory.
+- Run unit_test.php
+- Run date_time_helper.test.php
