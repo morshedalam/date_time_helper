@@ -1,6 +1,7 @@
 h1. About
 
-A sample DateTime helper class to get time difference in both words and array with example of writing unit test using [SimpleTest](http://www.simpletest.org/en/download.html "SimpleTest")
+A DateTime helper class to get time difference in both words and array
+with example of writing unit test using "SimpleTest":http://www.simpletest.org/en/download.html
 
 
 h3. Time difference as words
@@ -25,6 +26,6 @@ Others          => exactly what should be
 
 h3. Testing
 
-- Download [SimpleTest](http://www.simpletest.org/en/download.html "SimpleTest") suit and place it to document root directory.
+- Download "SimpleTest":http://www.simpletest.org/en/download.html suit and place it to document root directory.
 - Run unit_test.php
 - Run date_time_helper.test.php
