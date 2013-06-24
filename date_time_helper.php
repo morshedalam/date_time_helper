@@ -10,7 +10,6 @@
  */
 class DateTimeHelper extends DateTime
 {
-
     private $keys = array(
         'y' => array('year', 31104000),
         'm' => array('month', 2592000),
@@ -19,6 +18,11 @@ class DateTimeHelper extends DateTime
         'i' => array('minute', 60)
     );
 
+    /**
+     * Class constructor     *
+     * @param $time
+     * @param String  $zone, timezone
+     */
     public function __construct($time = "now", $zone = NULL)
     {
         //Set the time zone as 'Asia/Shanghai' for null
@@ -27,10 +31,10 @@ class DateTimeHelper extends DateTime
     }
 
     /**
-     *  Finds the time difference between two dates
-     * @param from DateTime
-     * @param to DateTime
-     * @return the difference in the two DateTime objects
+     * Time difference between two dates
+     * @param $from
+     * @param $to
+     * @return Time, difference in the two DateTime objects
      */
     public function timeDifference($from = 'now', $to = NULL)
     {
@@ -40,11 +44,11 @@ class DateTimeHelper extends DateTime
     }
 
     /**
-     *  Get the time difference as words
-     * @param from DateTime
-     * @param to DateTime
-     * @prefix to String to add as a prefix
-     * @suffix to String to add as a suffix
+     * Get the time difference as words
+     * @param DateTime $from
+     * @param DateTime $to
+     * @param String $prefix, to add as a prefix
+     * @param String $suffix, to add as a suffix
      * @return the time difference as string
      */
     public function timeDiffAsWords($from = NULL, $to = NULL, $prefix = 'about', $suffix = 'ago')
@@ -77,10 +81,52 @@ class DateTimeHelper extends DateTime
     }
 
     /**
-     *  Convert time to string and pluralize
-     * @param word string, ex: hour, minute
-     * @param value int
-     * @return pluralized word with string convertion
+     * Get integer datetime and return details as an array
+     * @param int $time to return time details as array
+     * @return Array(Year, Month, Day, WeekOfTheMonth, Day Position, Day name)
+     */
+    function timeToInfo($time)
+    {
+        $year = intval(date("Y", $time));
+        $month = intval(date("m", $time));
+        $day = intval(date("d", $time));
+
+        for ($i = 0; $i < 7; $i++) {
+            $days[] = date("l", mktime(0, 0, 0, $month, ($i + 1), date("Y", $time)));
+        }
+
+        $day_position = array_search(date("l", $time), $days);
+        $day_of_month = array_search($days[0], $days) - $day_position;
+        $week_of_the_month = (($day + $day_of_month + 6) / 7);
+
+        return array($year, $month, $day, $week_of_the_month, $day_position, $days[$day_position]);
+    }
+
+    /**
+     * Repeat date of a week
+     * @param Date $date
+     * @param int $week
+     * @return Repeated date after $week week
+     */
+    function repeatDateByWeek($date, $week = 1)
+    {
+        $date_time = strtotime($date);
+        $date_details = $this->timeToInfo($date_time);
+
+        $key = $week > 0 ? 'next' : 'previous';
+        for ($i = 0; $i < abs($week); $i++) {
+            $date_time = strtotime("$key $date_details[5]", $date_time);
+            $date_details = $this->timeToInfo($date_time);
+        }
+
+        return date('Y-m-d', $date_time);
+    }
+
+    /**
+     * Convert time to string and pluralize
+     * @param String $word, ex: hour, minute
+     * @param int $value
+     * @return pluralized word with string conversion
      */
     private function _stringify($word, $value = 0)
     {
