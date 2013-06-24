@@ -13,52 +13,103 @@ class DateTimeHelper extends DateTime
     private $keys = array(
         'y' => array('year', 31104000),
         'm' => array('month', 2592000),
+        'w' => array('week', 604800),
         'd' => array('day', 86400),
         'h' => array('hour', 3600),
-        'i' => array('minute', 60)
+        'i' => array('minute', 60),
+        's' => array('second', 0)
     );
 
     /**
-     * Class constructor     *
-     * @param $time
+     * Current DateTime
+     * @var Object
+     */
+    private $now = null;
+
+    /**
+     * Time details
+     * @var Object
+     */
+    public $time_details = null;
+
+
+    /**
+     * Class constructor
+     * @param $date_time
      * @param String  $zone, timezone
      */
-    public function __construct($time = "now", $zone = NULL)
+    public function __construct($date_time = "now", $zone = NULL)
     {
         //Set the time zone as 'Asia/Shanghai' for null
         $zone = $zone ? $zone : 'Asia/Shanghai';
-        parent::__construct($time, new DateTimeZone($zone));
+        parent::__construct($date_time, new DateTimeZone($zone));
+
+        $this->now = $this->_date($date_time);
+        $this->time_details = $this->timeToInfo($date_time);
+    }
+
+    /**
+     * Get DateTime and return details as an object
+     * @param string $date_time
+     * @return Object with (Year, Month, Day, WeekOfTheMonth, Day Position, Day name)
+     */
+    function timeToInfo($date_time = '')
+    {
+        if ($date_time == '')
+            return $this->time_details;
+
+        $time = $this->getTimestamp($date_time);
+
+        $time_details = new stdClass();
+        $time_details->y = ($y = intval(date("Y", $time))) ? $y : null;
+        $time_details->m = ($m = intval(date("m", $time))) ? $m : null;
+        $time_details->d = ($d = intval(date("d", $time))) ? $d : null;
+        $time_details->h = ($h = intval(date("h", $time))) ? $h : null;
+        $time_details->i = ($i = intval(date("i", $time))) ? $i : null;
+        $time_details->s = ($s = intval(date("s", $time))) ? $s : null;
+
+        for ($i = 0; $i < 7; $i++) {
+            $days[] = date("l", mktime(0, 0, 0, $time_details->month, ($i + 1), $time_details->y));
+        }
+
+        $time_details->day_position = array_search(date("l", $time), $days);
+        $day_of_month = array_search($days[0], $days) - $time_details->day_position;
+        $time_details->week_of_the_month = (($time_details->d + $day_of_month + 6) / 7);
+
+        return $time_details;
     }
 
     /**
      * Time difference between two dates
-     * @param $from
-     * @param $to
+     * @param String $from
+     * @param String $to
      * @return Time, difference in the two DateTime objects
      */
-    public function timeDifference($from = 'now', $to = NULL)
+    public function timeDifference($from = '', $to = '')
     {
-        $from = new DateTime($from);
-        $to = new DateTime($to);
+        $from = $this->_date($from);
+        $to = $this->_date($to);
+
         return $to->diff($from);
     }
 
     /**
      * Get the time difference as words
-     * @param DateTime $from
-     * @param DateTime $to
+     * @param String $from
+     * @param String $to
      * @param String $prefix, to add as a prefix
      * @param String $suffix, to add as a suffix
      * @return the time difference as string
      */
-    public function timeDiffAsWords($from = NULL, $to = NULL, $prefix = 'about', $suffix = 'ago')
+    public function timeDiffAsWords($from = '', $to = '', $prefix = 'about', $suffix = 'ago')
     {
         $words = array();
+        $difference = '';
         $diff_in_seconds = 0;
 
-        $difference = '';
         if ($from) {
             $diffs = $this->timeDifference($from, $to);
+
             foreach ($diffs as $index => $value) {
                 $diff_in_seconds += $value * intval($this->keys[$index][1]);
             }
@@ -73,7 +124,8 @@ class DateTimeHelper extends DateTime
                 foreach ($this->timeDifference($from, $to) as $index => $value) {
                     $words[] = $this->_stringify($this->keys[$index][0], $value);
                 }
-                $difference = $prefix . ' ' . implode($words, ' ') . ' ' . $suffix;
+
+                $difference = trim($prefix . ' ' . implode($words, ' ')) . ' ' . $suffix;
             }
         }
 
@@ -81,45 +133,88 @@ class DateTimeHelper extends DateTime
     }
 
     /**
-     * Get integer datetime and return details as an array
-     * @param int $time to return time details as array
-     * @return Array(Year, Month, Day, WeekOfTheMonth, Day Position, Day name)
+     * Next Repeat date
+     *
+     * @param String $date
+     * @param int $interval
+     * @param string $key, repetition type
+     * @return Repeated date before/after ($day) day
      */
-    function timeToInfo($time)
+    public function nextRepeatDate($date = '', $interval = 1, $key = 'm')
     {
-        $year = intval(date("Y", $time));
-        $month = intval(date("m", $time));
-        $day = intval(date("d", $time));
+        $date = $date ? $date : date('Y-m-d h:i:s');
+        $key = $this->keys[$key][0] . 's';
 
-        for ($i = 0; $i < 7; $i++) {
-            $days[] = date("l", mktime(0, 0, 0, $month, ($i + 1), date("Y", $time)));
-        }
-
-        $day_position = array_search(date("l", $time), $days);
-        $day_of_month = array_search($days[0], $days) - $day_position;
-        $week_of_the_month = (($day + $day_of_month + 6) / 7);
-
-        return array($year, $month, $day, $week_of_the_month, $day_position, $days[$day_position]);
+        return date('Y-m-d h:i:s', strtotime("$date $interval $key"));
     }
 
     /**
-     * Repeat date of a week
-     * @param Date $date
+     * Repeat date by week
+     * For backward compatibility, will be remove from next year
+     *
+     * @param String $date
      * @param int $week
-     * @return Repeated date after $week week
+     * @return Repeated date after/before ($week) week
      */
     function repeatDateByWeek($date, $week = 1)
     {
-        $date_time = strtotime($date);
-        $date_details = $this->timeToInfo($date_time);
+        $this->nextRepeatDate($date, $week, 'w');
+    }
 
-        $key = $week > 0 ? 'next' : 'previous';
-        for ($i = 0; $i < abs($week); $i++) {
-            $date_time = strtotime("$key $date_details[5]", $date_time);
-            $date_details = $this->timeToInfo($date_time);
+    public function getTimestamp($date = '')
+    {
+        if ($date == '') {
+            return parent::getTimestamp();
         }
 
-        return date('Y-m-d', $date_time);
+        return strtotime($date);
+    }
+
+    /**
+     * Specific date attribute
+     * @param string $date_time
+     * @return mixed
+     */
+    public function year($date_time = '')
+    {
+        return $this->_datePart('y', $date_time);
+    }
+
+    public function month($date_time = '')
+    {
+        return $this->_datePart('m', $date_time);
+    }
+
+    public function day($date_time = '')
+    {
+        return $this->_datePart('d', $date_time);
+    }
+
+    public function hours($date_time = '')
+    {
+        return $this->_datePart('h', $date_time);
+    }
+
+    public function minutes($date_time = '')
+    {
+        return $this->_datePart('i', $date_time);
+    }
+
+    public function seconds($date_time = '')
+    {
+        return $this->_datePart('s', $date_time);
+    }
+
+    private function _datePart($key, $date_time = '')
+    {
+        if (!$key)
+            return null;
+
+        if ($date_time == '') {
+            return $this->time_details->$key;
+        }
+
+        return date($key, $this->getTimestamp($date_time));
     }
 
     /**
@@ -140,6 +235,11 @@ class DateTimeHelper extends DateTime
         }
 
         return $str;
+    }
+
+    private function _date($date = '')
+    {
+        return $date == '' ? $this->now : new DateTime($date);
     }
 
 }
