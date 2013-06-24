@@ -30,7 +30,7 @@ h6. DateTime details as an object
 <pre>
 $dth->time_details
 
-$dth->timeToInfo('2011-03-01 10:10:10');
+$dth->toArray('2011-03-01 10:10:10');
 
 //stdClass Object ( [y] => 2013 [m] => 6 [d] => 24 [h] => 5 [i] => 15 [s] => 16 
 //[day_position] => 2 [week_of_the_month] => 4 )
@@ -40,11 +40,11 @@ $dth->timeToInfo('2011-03-01 10:10:10');
 h6. Date Time difference
 
 <pre>
-$dth->timeDifference($date);
+$dth->differenceAsObject($date);
 //DateInterval Object ( [y] => 2 [m] => 3 [d] => 23 [h] => 7 [i] => 5 [s] => 6 
 //[invert] => 1 [days] => 846 )
 
-$dth->timeDiffAsWords('2011-03-01 10:00:10');
+$dth->differenceAsWords('2011-03-01 10:00:10');
 //about 2 years 3 months 23 days 7 hours 5 minutes 6 seconds ago
 </pre>
 

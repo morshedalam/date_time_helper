@@ -45,7 +45,7 @@ class DateTimeHelper extends DateTime
         parent::__construct($date_time, new DateTimeZone($zone));
 
         $this->now = $this->_date($date_time);
-        $this->time_details = $this->timeToInfo($date_time);
+        $this->time_details = $this->toArray($date_time);
     }
 
     /**
@@ -53,7 +53,7 @@ class DateTimeHelper extends DateTime
      * @param string $date_time
      * @return Object with (Year, Month, Day, WeekOfTheMonth, Day Position, Day name)
      */
-    function timeToInfo($date_time = '')
+    function toArray($date_time = '')
     {
         if ($date_time == '')
             return $this->time_details;
@@ -79,7 +79,7 @@ class DateTimeHelper extends DateTime
      * @param String $to
      * @return Time, difference in the two DateTime objects
      */
-    public function timeDifference($from = '', $to = '')
+    public function differenceAsObject($from = '', $to = '')
     {
         $from = $this->_date($from);
         $to = $this->_date($to);
@@ -95,14 +95,14 @@ class DateTimeHelper extends DateTime
      * @param String $suffix, to add as a suffix
      * @return the time difference as string
      */
-    public function timeDiffAsWords($from = '', $to = '', $prefix = 'about', $suffix = 'ago')
+    public function differenceAsWords($from = '', $to = '', $prefix = 'about', $suffix = 'ago')
     {
         $words = array();
         $difference = '';
         $diff_in_seconds = 0;
 
         if ($from) {
-            $diffs = $this->timeDifference($from, $to);
+            $diffs = $this->differenceAsObject($from, $to);
 
             foreach ($diffs as $index => $value) {
                 $diff_in_seconds += $value * intval($this->keys[$index][1]);
@@ -115,7 +115,7 @@ class DateTimeHelper extends DateTime
             } elseif ($diff_in_seconds > 3300 & $diff_in_seconds < 3900) { //55 - 65 minutes
                 $difference = $prefix . ' an hour ' . $suffix;
             } else {
-                foreach ($this->timeDifference($from, $to) as $index => $value) {
+                foreach ($this->differenceAsObject($from, $to) as $index => $value) {
                     $words[] = $this->_stringify($this->keys[$index][0], $value);
                 }
 
