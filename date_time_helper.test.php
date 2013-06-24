@@ -15,8 +15,8 @@ $dth = new DateTimeHelper();
 
 echo "<h3>Time details</h3>";
 echo "<pre>";
-$x = $dth->time_details;
-print_r($x);
+print_r($dth->time_details);
+print_r($dth->timeToInfo('2013-06-1'));
 echo "</pre>";
 
 echo "<h3>Time parts</h3>";

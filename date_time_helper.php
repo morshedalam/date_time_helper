@@ -67,14 +67,8 @@ class DateTimeHelper extends DateTime
         $time_details->h = ($h = intval(date("h", $time))) ? $h : null;
         $time_details->i = ($i = intval(date("i", $time))) ? $i : null;
         $time_details->s = ($s = intval(date("s", $time))) ? $s : null;
-
-        for ($i = 0; $i < 7; $i++) {
-            $days[] = date("l", mktime(0, 0, 0, $time_details->month, ($i + 1), $time_details->y));
-        }
-
-        $time_details->day_position = array_search(date("l", $time), $days);
-        $day_of_month = array_search($days[0], $days) - $time_details->day_position;
-        $time_details->week_of_the_month = (($time_details->d + $day_of_month + 6) / 7);
+        $time_details->day_position = date('N', $time);
+        $time_details->week_of_the_month = ceil(date('j', $time) / 7);
 
         return $time_details;
     }
