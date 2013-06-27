@@ -1,6 +1,6 @@
 h3. DateTime helper
 
-Provide time details either as an array or an object and difference between times in words, timestams and an object. Also, return a new time adding time intervals in days, week, month, etc..
+Provide time details either as an array or an object and difference between times in words, timestamps and an object. Also, return a new time adding time intervals in days, week, month, etc..
 "View Demo":http://www.scripts.morshed-alam.com/date_time_helper/ :: "Try it out and Rate on phpclasses.org":http://www.phpclasses.org/package/7807-PHP-Get-the-difference-between-times-in-English.html
 
 
