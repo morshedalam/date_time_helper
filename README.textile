@@ -1,5 +1,7 @@
 h3. A DateTime helper class
 
+"phpclasses.org":http://www.phpclasses.org/package/7807-PHP-Get-the-difference-between-times-in-English.html :: "View Demo":http://www.scripts.morshed-alam.com/date_time_helper/
+
 
 h6. Uses
 
